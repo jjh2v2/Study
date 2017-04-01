@@ -3,6 +3,6 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
-
-	return 1;
+	MessageBox(NULL, TEXT("gggg"), TEXT(""),MB_OK);
+	return 0;
 }
