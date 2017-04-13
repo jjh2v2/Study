@@ -9,7 +9,6 @@ int Win32Application::Run(CoreFrameWork* pSample, HINSTANCE hInstance, int nCmdS
 	// Parse the command line parameters
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
-	pSample->ParseCommandLineArgs(argv, argc);
 	LocalFree(argv);
 
 	// Initialize the window class.
