@@ -1,5 +1,7 @@
 #pragma once
-#include "Win32Application.h"
+#include "stdafx.h"
+
+class Win32Application;
 
 class CoreFrameWork
 {
@@ -27,8 +29,6 @@ public:
 	void SetCustomWindowText(LPCWSTR text);
 
 protected:
-	void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
-
 	// Viewport dimensions.
 	UINT m_width;
 	UINT m_height;
@@ -43,4 +43,17 @@ private:
 
 	// Window title.
 	std::wstring m_title;
+
+private:
+	ComPtr<ID3D12Device> m_device[DX12_DEVICE_COUNT];
+
+protected:
+	void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
+
+public:
+	ComPtr<ID3D12Device> GetDevices(int _index=0) {
+		return m_device[_index];
+	}
 };
+
+#include "Win32Application.h"

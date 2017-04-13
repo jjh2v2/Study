@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "CoreFrameWork.h"
 
-using namespace Microsoft::WRL;
-
 void CoreFrameWork::SetCustomWindowText(LPCWSTR text)
 {
 	std::wstring windowText = m_title + L": " + text;
@@ -85,22 +83,25 @@ void CoreFrameWork::OnInit()
 	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	// 하드웨어 어뎁터 얻기 시작
+	// 하드웨어 어뎁터 얻기
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	ComPtr<IDXGIAdapter1> hardwareAdapter0, hardwareAdapter1;
-	factory->EnumAdapters1(0, &hardwareAdapter0);
-	factory->EnumAdapters1(1, &hardwareAdapter1);
-
-	DXGI_ADAPTER_DESC1 desc0, desc1;
-	hardwareAdapter0->GetDesc1(&desc0);
-	hardwareAdapter1->GetDesc1(&desc1);
+	ComPtr<IDXGIAdapter1> hardwareAdapter[DX12_DEVICE_COUNT];
+	DXGI_ADAPTER_DESC1 desc[DX12_DEVICE_COUNT];
+	for (int i=0; i<DX12_DEVICE_COUNT; i++)
+	{
+		factory->EnumAdapters1(i, &hardwareAdapter[i]);
+		hardwareAdapter[i]->GetDesc1(&desc[i]);
+	}
 	
-	ComPtr<ID3D12Device> m_device0, m_device1;
-
-	ThrowIfFailed( D3D12CreateDevice(hardwareAdapter0.Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device0)) );
-	ThrowIfFailed( D3D12CreateDevice(hardwareAdapter1.Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device1)) );
-	//D3D12CreateDevice(hardwareAdapter0.Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
-	//D3D12CreateDevice(hardwareAdapter1.Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
-
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 하드웨어 디바이스 얻기
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	for (int i = 0; i < DX12_DEVICE_COUNT; i++)
+	{
+		ThrowIfFailed(D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device[i])));
+		//D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
+	}
+	ComPtr<ID3D12Device> dsfsf = GetDevices();
+	ComPtr<ID3D12Device> dsfsfss = GetDevices(1);
 	int iiiiiii = 0;
 }

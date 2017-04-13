@@ -1,6 +1,6 @@
 #pragma once
+#include "stdafx.h"
 
-#include "CoreFrameWork.h"
 class CoreFrameWork;
 
 class Win32Application
@@ -15,3 +15,5 @@ protected:
 private:
 	static HWND m_hwnd;
 };
+
+#include "CoreFrameWork.h"
