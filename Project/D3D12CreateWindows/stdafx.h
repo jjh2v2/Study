@@ -29,6 +29,11 @@
 #include <wrl.h>
 #include <shellapi.h>
 
+
+
+const static D3D_FEATURE_LEVEL gD3D_FEATURE_LEVEL = D3D_FEATURE_LEVEL_12_1;
+
+
 inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
