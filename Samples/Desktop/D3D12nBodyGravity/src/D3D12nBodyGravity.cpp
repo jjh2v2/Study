@@ -635,7 +635,7 @@ void D3D12nBodyGravity::OnRender()
 		}
 	}
 
-	PIXBeginEvent(m_commandQueue.Get(), 0, L"Render");
+	(m_commandQueue.Get(), 0, L"Render");
 
 	// Record all the commands we need to render the scene into the command list.
 	PopulateCommandList();
@@ -644,7 +644,6 @@ void D3D12nBodyGravity::OnRender()
 	ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
 	m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	PIXEndEvent(m_commandQueue.Get());
 
 	// Present the frame.
 	ThrowIfFailed(m_swapChain->Present(1, 0));
@@ -706,9 +705,8 @@ void D3D12nBodyGravity::PopulateCommandList()
 		CD3DX12_GPU_DESCRIPTOR_HANDLE srvHandle(m_srvUavHeap->GetGPUDescriptorHandleForHeapStart(), srvIndex, m_srvUavDescriptorSize);
 		m_commandList->SetGraphicsRootDescriptorTable(GraphicsRootSRVTable, srvHandle);
 
-		PIXBeginEvent(m_commandList.Get(), 0, L"Draw particles for thread %u", n);
+		(m_commandList.Get(), 0, L"Draw particles for thread %u", n);
 		m_commandList->DrawInstanced(ParticleCount, 1, 0, 0);
-		PIXEndEvent(m_commandList.Get());
 	}
 
 	m_commandList->RSSetViewports(1, &m_viewport);
@@ -735,9 +733,8 @@ DWORD D3D12nBodyGravity::AsyncComputeThreadProc(int threadIndex)
 		ThrowIfFailed(pCommandList->Close());
 		ID3D12CommandList* ppCommandLists[] = { pCommandList };
 
-		PIXBeginEvent(pCommandQueue, 0, L"Thread %d: Iterate on the particle simulation", threadIndex);
+		(pCommandQueue, 0, L"Thread %d: Iterate on the particle simulation", threadIndex);
 		pCommandQueue->ExecuteCommandLists(1, ppCommandLists);
-		PIXEndEvent(pCommandQueue);
 
 		// Wait for the compute shader to complete the simulation.
 		UINT64 threadFenceValue = InterlockedIncrement(&m_threadFenceValues[threadIndex]);

@@ -38,6 +38,7 @@ void CoreFrameWork::GetHardwareAdapter(IDXGIFactory2* pFactory, IDXGIAdapter1** 
 }
 
 CoreFrameWork::CoreFrameWork(UINT width, UINT height, std::wstring name) :
+	m_frameIndex(0),
 	m_width(width),
 	m_height(height),
 	m_title(name),
@@ -60,6 +61,9 @@ void CoreFrameWork::OnInit()
 	/* DX12 다바이스 생선 파이프라인 */
 	/*****************************/
 
+
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 디버그 레이어 설정
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,41 +80,115 @@ void CoreFrameWork::OnInit()
 	}
 #endif
 
+
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 펙토리 생성
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ComPtr<IDXGIFactory4> factory;
 	ThrowIfFailed( CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)) );
 
+
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 하드웨어 어뎁터 얻기
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	ComPtr<IDXGIAdapter1> hardwareAdapter[DX12_DEVICE_COUNT];
-	DXGI_ADAPTER_DESC1 desc[DX12_DEVICE_COUNT];
-	for (int i=0; i<DX12_DEVICE_COUNT; i++)
-	{
-		ThrowIfFailed( factory->EnumAdapters1(i, &hardwareAdapter[i]) );
-		hardwareAdapter[i]->GetDesc1(&desc[i]);
-	}
+	ComPtr<IDXGIAdapter1> hardwareAdapter;
+	DXGI_ADAPTER_DESC1 desc;
+	ThrowIfFailed(factory->EnumAdapters1(0, &hardwareAdapter));
+	hardwareAdapter->GetDesc1(&desc);
 	
+
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 하드웨어 디바이스 얻기
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	for (int i = 0; i < DX12_DEVICE_COUNT; i++)
-	{
-		ThrowIfFailed( D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device[i])) );
-		//실제 디바이스를 만들지는 않지만 확인용으로 쓸수있다
-		//D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
-	}
+	ThrowIfFailed( D3D12CreateDevice(hardwareAdapter.Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device)) );
+	//실제 디바이스를 만들지는 않지만 확인용으로 쓸수있다
+	//D3D12CreateDevice(hardwareAdapter.Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
 	
-	// Describe and create the command queue.
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 커멘드큔 얻기
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-	for (int i = 0; i < DX12_DEVICE_COUNT; i++)
-	{
-		ThrowIfFailed( m_device[i]->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue[i])) );
-	}
+	ThrowIfFailed( m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)) );
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 스왑 체인을 어떤종류인지 설명하고 생성.
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	static const UINT FrameCount = 2;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+	swapChainDesc.BufferCount = FrameCount;
+	swapChainDesc.Width = m_width;
+	swapChainDesc.Height = m_height;
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapChainDesc.SampleDesc.Count = 1;
+	ComPtr<IDXGISwapChain1> swapChain;
+	ThrowIfFailed(factory->CreateSwapChainForHwnd(
+		m_commandQueue.Get(),		// Swap chain needs the queue so that it can force a flush on it.
+		Win32Application::GetHwnd(),
+		&swapChainDesc,
+		nullptr,
+		nullptr,
+		&swapChain
+	));
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 풀스크린 막기 알트 + 엔터 막기
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	ThrowIfFailed(factory->MakeWindowAssociation(Win32Application::GetHwnd(), DXGI_MWA_NO_ALT_ENTER));
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// IDXGISwapChain1을 IDXGISwapChain3으로 형변환한단
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	ThrowIfFailed(swapChain.As(&m_swapChain));
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 현제 백버퍼가 어떤놈인지 인덱스를 받는다
+	// 현재 후면 버퍼의 권리를 얻는 버퍼를 탐색
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 정보체(Descriptor)라는 추상적인 개념으로 관리하며
+	// 이는 셰이더 자원 정의(Shader resource view) 등도 포함됩니다.
+	// 이러한 Descriptor는 효율적인 관리를 위하여 정보체 공간(Descriptor heap)이라는 곳에 모여 관리됩니다.
+	// Describe and create a render target view (RTV) descriptor heap.
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+	rtvHeapDesc.NumDescriptors = FrameCount;
+	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	ThrowIfFailed(m_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// 현재 장치의 샘플러 설명자 크기를 가져옵니다.
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
 	int iiiiiii = 0;
 }

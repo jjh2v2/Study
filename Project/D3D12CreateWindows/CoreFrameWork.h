@@ -45,15 +45,19 @@ private:
 	std::wstring m_title;
 
 private:
-	ComPtr<ID3D12Device> m_device[DX12_DEVICE_COUNT];
-	ComPtr<ID3D12CommandQueue> m_commandQueue[DX12_DEVICE_COUNT];
+	UINT m_rtvDescriptorSize;
+	ComPtr<ID3D12DescriptorHeap> m_rtvHeap;
+	UINT m_frameIndex;
+	ComPtr<IDXGISwapChain3> m_swapChain;
+	ComPtr<ID3D12Device> m_device;
+	ComPtr<ID3D12CommandQueue> m_commandQueue;
 
 protected:
 	void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
 
 public:
 	inline ComPtr<ID3D12Device> GetDevices(int _index=0) {
-		return m_device[_index];
+		return m_device;
 	}
 };
 
