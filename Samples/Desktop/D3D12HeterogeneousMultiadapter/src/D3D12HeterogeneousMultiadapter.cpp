@@ -123,7 +123,7 @@ void D3D12HeterogeneousMultiadapter::LoadPipeline()
 		ThrowIfFailed(ppAdapters[i]->GetDesc1(&m_adapterDescs[i]));
 	}
 
-	// Describe and create the command queues and get their timestamp frequency.
+	// 커맨드 큐를 기술하고 생성하고 타임 스탬프 빈도를 얻는다.
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;

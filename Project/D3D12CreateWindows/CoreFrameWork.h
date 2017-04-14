@@ -46,12 +46,13 @@ private:
 
 private:
 	ComPtr<ID3D12Device> m_device[DX12_DEVICE_COUNT];
+	ComPtr<ID3D12CommandQueue> m_commandQueue[DX12_DEVICE_COUNT];
 
 protected:
 	void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
 
 public:
-	ComPtr<ID3D12Device> GetDevices(int _index=0) {
+	inline ComPtr<ID3D12Device> GetDevices(int _index=0) {
 		return m_device[_index];
 	}
 };

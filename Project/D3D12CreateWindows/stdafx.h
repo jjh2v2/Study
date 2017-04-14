@@ -76,3 +76,32 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 		*(lastSlash + 1) = L'\0';
 	}
 }
+
+// 디버깅을 돕기 위해 객체에 이름을 지정합니다.
+#if defined(_DEBUG)
+inline void SetName(ID3D12Object* pObject, LPCWSTR name)
+{
+	pObject->SetName(name);
+}
+inline void SetNameIndexed(ID3D12Object* pObject, LPCWSTR name, UINT index)
+{
+	WCHAR fullName[50];
+	if (swprintf_s(fullName, L"%s[%u]", name, index) > 0)
+	{
+		pObject->SetName(fullName);
+	}
+}
+#else
+inline void SetName(ID3D12Object*, LPCWSTR)
+{
+}
+inline void SetNameIndexed(ID3D12Object*, LPCWSTR, UINT)
+{
+}
+#endif
+
+// ComPtr <T>에 대한 명명 도우미.
+// 변수의 이름을 객체의 이름으로 지정합니다.
+// 인덱싱 된 변형은 개체 이름에 인덱스를 포함합니다.
+#define NAME_D3D12_OBJECT(x) SetName(x.Get(), L#x)
+#define NAME_D3D12_OBJECT_INDEXED(x, n) SetNameIndexed(x[n].Get(), L#x, n)
