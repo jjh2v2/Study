@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "CoreFrameWork.h"
 
-
-
 void CoreFrameWork::SetCustomWindowText(LPCWSTR text)
 {
 	std::wstring windowText = m_title + L": " + text;
