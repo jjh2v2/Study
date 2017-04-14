@@ -80,7 +80,7 @@ void CoreFrameWork::OnInit()
 	// 펙토리 생성
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ComPtr<IDXGIFactory4> factory;
-	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
+	ThrowIfFailed( CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)) );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 하드웨어 어뎁터 얻기
@@ -89,7 +89,7 @@ void CoreFrameWork::OnInit()
 	DXGI_ADAPTER_DESC1 desc[DX12_DEVICE_COUNT];
 	for (int i=0; i<DX12_DEVICE_COUNT; i++)
 	{
-		factory->EnumAdapters1(i, &hardwareAdapter[i]);
+		ThrowIfFailed( factory->EnumAdapters1(i, &hardwareAdapter[i]) );
 		hardwareAdapter[i]->GetDesc1(&desc[i]);
 	}
 	
@@ -98,7 +98,7 @@ void CoreFrameWork::OnInit()
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	for (int i = 0; i < DX12_DEVICE_COUNT; i++)
 	{
-		ThrowIfFailed(D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device[i])));
+		ThrowIfFailed( D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device[i])) );
 		//실제 디바이스를 만들지는 않지만 확인용으로 쓸수있다
 		//D3D12CreateDevice(hardwareAdapter[i].Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
 	}
@@ -107,8 +107,10 @@ void CoreFrameWork::OnInit()
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-
-	ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)));
+	for (int i = 0; i < DX12_DEVICE_COUNT; i++)
+	{
+		ThrowIfFailed( m_device[i]->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue[i])) );
+	}
 
 	int iiiiiii = 0;
 }

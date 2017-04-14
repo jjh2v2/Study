@@ -46,7 +46,7 @@ hm1.insert(std::unordered_map<int, int>::value_type('a', 1));
 */
 
 const static D3D_FEATURE_LEVEL gD3D_FEATURE_LEVEL = D3D_FEATURE_LEVEL_12_1;// D3D_FEATURE_LEVEL_11_0 ~ D3D_FEATURE_LEVEL_12_1
-#define DX12_DEVICE_COUNT 2
+#define DX12_DEVICE_COUNT 1
 
 inline void ThrowIfFailed(HRESULT hr)
 {
