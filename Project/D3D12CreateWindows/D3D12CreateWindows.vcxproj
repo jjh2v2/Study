@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CoreFrameWork.h" />
+    <ClInclude Include="d3dx12.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Win32Application.h" />
   </ItemGroup>
