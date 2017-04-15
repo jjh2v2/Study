@@ -25,6 +25,7 @@
 #include <dxgi1_4.h>
 #include <D3Dcompiler.h>
 #include <DirectXMath.h>
+
 #include "d3dx12.h"
 
 #include <string>
@@ -39,6 +40,7 @@
 
 using Microsoft::WRL::ComPtr;
 using namespace std;
+using namespace DirectX;
 
 /*
 헤쉬맵 쓰는법
