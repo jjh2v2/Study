@@ -34,9 +34,23 @@ VertexOut VS(VertexIn vin)
     return vout;
 }
 
-float4 PS(VertexOut pin) : SV_Target
+struct PSOutput
 {
-    return pin.Color;
+	float4 Color : SV_Target0;
+	float4 Normal0 : SV_Target1;
+	float4 Normal1 : SV_Target2;
+	float4 Normal2 : SV_Target3;
+};
+
+PSOutput PS(VertexOut pin)
+{
+	PSOutput output;
+	output.Color = pin.Color;
+	output.Normal0 = pin.Color;
+	output.Normal1 = pin.Color;
+	output.Normal2 = pin.Color;
+
+	return output;
 }
 
 technique11 ColorTech

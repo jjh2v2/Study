@@ -40,9 +40,13 @@ D3DApp::D3DApp(HINSTANCE hInstance)
 	md3dImmediateContext(0),
 	mSwapChain(0),
 	mDepthStencilBuffer(0),
-	mRenderTargetView(0),
+	//mRenderTargetView(0),
 	mDepthStencilView(0)
 {
+	for (int i = 0; i < 4; i++)
+	{
+		mRenderTargetView[i] = 0;
+	}
 	ZeroMemory(&mScreenViewport, sizeof(D3D11_VIEWPORT));
 
 	// Get a pointer to the application object so we can forward 
@@ -53,7 +57,10 @@ D3DApp::D3DApp(HINSTANCE hInstance)
 
 D3DApp::~D3DApp()
 {
-	ReleaseCOM(mRenderTargetView);
+	for (int i=0; i<4; i++)
+	{
+		ReleaseCOM(mRenderTargetView[i]);
+	}
 	ReleaseCOM(mDepthStencilView);
 	ReleaseCOM(mSwapChain);
 	ReleaseCOM(mDepthStencilBuffer);
@@ -136,54 +143,106 @@ void D3DApp::OnResize()
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
 
-	ReleaseCOM(mRenderTargetView);
+	for (int i = 0; i < 4; i++)
+	{
+		ReleaseCOM(mRenderTargetView[i]);
+	}
 	ReleaseCOM(mDepthStencilView);
 	ReleaseCOM(mDepthStencilBuffer);
 
 
-	// Resize the swap chain and recreate the render target view.
+	/***********************************************************************************************/
+	D3D11_TEXTURE2D_DESC dtd = {
+		(UINT)mClientWidth, //UINT Width;
+		(UINT)mClientHeight, //UINT Height;
+		1, //UINT MipLevels;
+		1, //UINT ArraySize;
+		DXGI_FORMAT_UNKNOWN, //DXGI_FORMAT Format;
+		1, //DXGI_SAMPLE_DESC SampleDesc;
+		0,
+		D3D11_USAGE_DEFAULT,//D3D11_USAGE Usage;
+		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE,//UINT BindFlags;
+		0,//UINT CPUAccessFlags;
+		0//UINT MiscFlags;    
+	};
+	dtd.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	dtd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	HR(md3dDevice->CreateTexture2D(&dtd, NULL, &m_ColorSpecIntensityRT));
+	HR(md3dDevice->CreateRenderTargetView(m_ColorSpecIntensityRT, 0, &mRenderTargetView[0]));
 
+	dtd.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+	HR(md3dDevice->CreateTexture2D(&dtd, NULL, &m_NormalRT));
+	HR(md3dDevice->CreateRenderTargetView(m_NormalRT, 0, &mRenderTargetView[1]));
+
+	dtd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	HR(md3dDevice->CreateTexture2D(&dtd, NULL, &m_SpecPowerRT));
+	HR(md3dDevice->CreateRenderTargetView(m_SpecPowerRT, 0, &mRenderTargetView[2]));
+
+	// Resize the swap chain and recreate the render target view.
 	HR(mSwapChain->ResizeBuffers(1, mClientWidth, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ID3D11Texture2D* backBuffer;
 	HR(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
-	HR(md3dDevice->CreateRenderTargetView(backBuffer, 0, &mRenderTargetView));
+	HR(md3dDevice->CreateRenderTargetView(backBuffer, 0, &mRenderTargetView[3]));
 	ReleaseCOM(backBuffer);
 
 	// Create the depth/stencil buffer and view.
 
-	D3D11_TEXTURE2D_DESC depthStencilDesc;
-	
-	depthStencilDesc.Width     = mClientWidth;
-	depthStencilDesc.Height    = mClientHeight;
-	depthStencilDesc.MipLevels = 1;
-	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//D3D11_TEXTURE2D_DESC depthStencilDesc;
+	//depthStencilDesc.Width     = mClientWidth;
+	//depthStencilDesc.Height    = mClientHeight;
+	//depthStencilDesc.MipLevels = 1;
+	//depthStencilDesc.ArraySize = 1;
+	//depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//depthStencilDesc.SampleDesc.Count = 1;
+	//depthStencilDesc.SampleDesc.Quality = 0;
+	//depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
+	//depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+	//depthStencilDesc.CPUAccessFlags = 0; 
+	//depthStencilDesc.MiscFlags      = 0;
 
-	// Use 4X MSAA? --must match swap chain MSAA values.
-	if( mEnable4xMsaa )
+	D3D11_TEXTURE2D_DESC ssss = {
+		(UINT)mClientWidth, //UINT Width;
+		(UINT)mClientHeight, //UINT Height;
+		1, //UINT MipLevels;
+		1, //UINT ArraySize;
+		DXGI_FORMAT_UNKNOWN, //DXGI_FORMAT Format;
+		1, //DXGI_SAMPLE_DESC SampleDesc;
+		0,
+		D3D11_USAGE_DEFAULT,//D3D11_USAGE Usage;
+		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE,//UINT BindFlags;
+		0,//UINT CPUAccessFlags;
+		0//UINT MiscFlags;    
+	};
+	ssss.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	HR(md3dDevice->CreateTexture2D(&ssss, NULL, &mDepthStencilBuffer));
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd =
 	{
-		depthStencilDesc.SampleDesc.Count   = 4;
-		depthStencilDesc.SampleDesc.Quality = m4xMsaaQuality-1;
-	}
-	// No MSAA
-	else
+		DXGI_FORMAT_D24_UNORM_S8_UINT,
+		D3D11_DSV_DIMENSION_TEXTURE2D,
+		0
+	};
+	HR(md3dDevice->CreateDepthStencilView(mDepthStencilBuffer, &dsvd, &mDepthStencilView));
+
+	dsvd.Flags = D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL;
+	HR(md3dDevice->CreateDepthStencilView(mDepthStencilBuffer, &dsvd, &m_DepthStencilReadOnlyDSV));
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC dsrvd =
 	{
-		depthStencilDesc.SampleDesc.Count   = 1;
-		depthStencilDesc.SampleDesc.Quality = 0;
-	}
+		DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+		D3D11_SRV_DIMENSION_TEXTURE2D,
+		0,
+		0
+	};
+	dsrvd.Texture2D.MipLevels = 1;
+	ID3D11ShaderResourceView* m_DepthStencilSRV;
+	HR(md3dDevice->CreateShaderResourceView(mDepthStencilBuffer, &dsrvd, &m_DepthStencilSRV));
 
-	depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
-	depthStencilDesc.CPUAccessFlags = 0; 
-	depthStencilDesc.MiscFlags      = 0;
-
-	HR(md3dDevice->CreateTexture2D(&depthStencilDesc, 0, &mDepthStencilBuffer));
-	HR(md3dDevice->CreateDepthStencilView(mDepthStencilBuffer, 0, &mDepthStencilView));
-
+	//D3DX11SaveTextureToFile(md3dImmediateContext, m_ColorSpecIntensityRT, D3DX11_IFF_BMP, L"testGBuffer0.BMP");
+	/***********************************************************************************************/
 
 	// Bind the render target view and depth/stencil view to the pipeline.
 
-	md3dImmediateContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
+	md3dImmediateContext->OMSetRenderTargets(4, mRenderTargetView, mDepthStencilView);
 	
 
 	// Set the viewport transform.

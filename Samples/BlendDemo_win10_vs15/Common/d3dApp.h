@@ -63,9 +63,14 @@ protected:
 	ID3D11DeviceContext* md3dImmediateContext;
 	IDXGISwapChain* mSwapChain;
 	ID3D11Texture2D* mDepthStencilBuffer;
-	ID3D11RenderTargetView* mRenderTargetView;
+	ID3D11RenderTargetView* mRenderTargetView[4];
 	ID3D11DepthStencilView* mDepthStencilView;
+	ID3D11DepthStencilView* m_DepthStencilReadOnlyDSV;
 	D3D11_VIEWPORT mScreenViewport;
+
+	ID3D11Texture2D* m_ColorSpecIntensityRT;
+	ID3D11Texture2D* m_SpecPowerRT;
+	ID3D11Texture2D* m_NormalRT;
 
 	// Derived class should set these in derived constructor to customize starting values.
 	std::wstring mMainWndCaption;

@@ -99,14 +99,28 @@ fxgroup
                 // Name                 Index   Mask Register SysValue  Format   Used
                 // -------------------- ----- ------ -------- -------- ------- ------
                 // SV_Target                0   xyzw        0   TARGET   float   xyzw
+                // SV_Target                1   xyzw        1   TARGET   float   xyzw
+                // SV_Target                2   xyzw        2   TARGET   float   xyzw
+                // SV_Target                3   xyzw        3   TARGET   float   xyzw
                 //
                 ps_5_0
                 dcl_globalFlags refactoringAllowed | skipOptimization
                 dcl_input_ps linear v1.xyzw
                 dcl_output o0.xyzw
-                mov o0.xyzw, v1.xyzw
+                dcl_output o1.xyzw
+                dcl_output o2.xyzw
+                dcl_output o3.xyzw
+                dcl_temps 4
+                mov r0.xyzw, v1.xyzw
+                mov r1.xyzw, v1.xyzw
+                mov r2.xyzw, v1.xyzw
+                mov r3.xyzw, v1.xyzw
+                mov o0.xyzw, r0.xyzw
+                mov o1.xyzw, r1.xyzw
+                mov o2.xyzw, r2.xyzw
+                mov o3.xyzw, r3.xyzw
                 ret 
-                // Approximately 2 instruction slots used
+                // Approximately 9 instruction slots used
                             
             };
         }
