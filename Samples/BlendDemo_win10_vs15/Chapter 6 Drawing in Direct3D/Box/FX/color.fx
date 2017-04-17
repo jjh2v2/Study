@@ -45,10 +45,10 @@ struct PSOutput
 PSOutput PS(VertexOut pin)
 {
 	PSOutput output;
-	output.Color = pin.Color;
-	output.Normal0 = pin.Color;
-	output.Normal1 = pin.Color;
-	output.Normal2 = pin.Color;
+	output.Color = pin.Color * 4;
+	output.Normal0 = pin.Color * 1;
+	output.Normal1 = pin.Color * 2;
+	output.Normal2 = pin.Color * 3;
 
 	return output;
 }

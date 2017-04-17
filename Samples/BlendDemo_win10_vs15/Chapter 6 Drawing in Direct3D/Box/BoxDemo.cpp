@@ -141,10 +141,12 @@ void BoxApp::UpdateScene(float dt)
 
 void BoxApp::DrawScene()
 {
+	/***********************************************************************************************/
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[0], reinterpret_cast<const float*>(&Colors::White));
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[1], reinterpret_cast<const float*>(&Colors::Black));
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[2], reinterpret_cast<const float*>(&Colors::Yellow));
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[3], reinterpret_cast<const float*>(&Colors::Blue));
+	/***********************************************************************************************/
 
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -174,14 +176,15 @@ void BoxApp::DrawScene()
 		md3dImmediateContext->DrawIndexed(36, 0, 0);
     }
 
-	DirectX::ScratchImage DxImage;
-	HRESULT hr_0 = DirectX::CaptureTexture(md3dDevice, md3dImmediateContext, m_ColorSpecIntensityRT, DxImage);
-	const Image* img = DxImage.GetImages();
-	HRESULT hr = SaveToWICFile(*img, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_JPEG), L"NEW_IMAGE.PNG");
-	if (FAILED(hr))
-
-	HRESULT hr = SaveToDDSFile(*img, DDS_FLAGS_NONE, L"NEW_TEXTURE.DDS");
-	if (FAILED(hr))
+	/***********************************************************************************************/
+	//DirectX::ScratchImage DxImage;
+	//HRESULT hr_0 = DirectX::CaptureTexture(md3dDevice, md3dImmediateContext, m_ColorSpecIntensityRT, DxImage);
+	//const Image* img = DxImage.GetImages();
+	//HRESULT hr = SaveToWICFile(*img, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_JPEG), L"NEW_IMAGE.PNG");
+	//if (FAILED(hr)) {}
+	//hr = SaveToDDSFile(*img, DDS_FLAGS_NONE, L"NEW_TEXTURE.DDS");
+	//if (FAILED(hr)) {}
+	/***********************************************************************************************/
 
 	HR(mSwapChain->Present(0, 0));
 }

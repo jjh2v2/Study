@@ -111,16 +111,20 @@ fxgroup
                 dcl_output o2.xyzw
                 dcl_output o3.xyzw
                 dcl_temps 4
-                mov r0.xyzw, v1.xyzw
-                mov r1.xyzw, v1.xyzw
-                mov r2.xyzw, v1.xyzw
-                mov r3.xyzw, v1.xyzw
+                itof r0.xyzw, l(4, 4, 4, 4)
+                mul r0.xyzw, r0.xyzw, v1.xyzw
+                itof r1.xyzw, l(1, 1, 1, 1)
+                mul r1.xyzw, r1.xyzw, v1.xyzw
+                itof r2.xyzw, l(2, 2, 2, 2)
+                mul r2.xyzw, r2.xyzw, v1.xyzw
+                itof r3.xyzw, l(3, 3, 3, 3)
+                mul r3.xyzw, r3.xyzw, v1.xyzw
                 mov o0.xyzw, r0.xyzw
                 mov o1.xyzw, r1.xyzw
                 mov o2.xyzw, r2.xyzw
                 mov o3.xyzw, r3.xyzw
                 ret 
-                // Approximately 9 instruction slots used
+                // Approximately 13 instruction slots used
                             
             };
         }
