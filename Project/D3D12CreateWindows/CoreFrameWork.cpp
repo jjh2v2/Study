@@ -5,7 +5,6 @@ void CoreFrameWork::SetCustomWindowText(LPCWSTR text)
 {
 	std::wstring windowText = m_title + L": " + text;
 	SetWindowText(Win32Application::GetHwnd(), windowText.c_str());
-
 }
 
 // Direct3D 12를 지원하는 첫 번째 사용 가능한 하드웨어 어댑터를 얻기위한 도우미 함수.
