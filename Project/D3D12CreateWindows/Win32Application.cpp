@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Win32Application.h"
 
-
 HWND Win32Application::m_hwnd = nullptr;
 
 int Win32Application::Run(CoreFrameWork* pSample, HINSTANCE hInstance, int nCmdShow)

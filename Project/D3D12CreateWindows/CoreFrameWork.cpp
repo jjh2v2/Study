@@ -61,9 +61,6 @@ void CoreFrameWork::OnInit()
 	/* DX12 다바이스 생선 파이프라인 */
 	/*****************************/
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 디버그 레이어 설정
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,17 +77,11 @@ void CoreFrameWork::OnInit()
 	}
 #endif
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 펙토리 생성
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ComPtr<IDXGIFactory4> factory;
-	ThrowIfFailed( CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)) );
-
-
-
+	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 하드웨어 어뎁터 얻기
@@ -99,19 +90,13 @@ void CoreFrameWork::OnInit()
 	DXGI_ADAPTER_DESC1 desc;
 	ThrowIfFailed(factory->EnumAdapters1(0, &hardwareAdapter));
 	hardwareAdapter->GetDesc1(&desc);
-	
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 하드웨어 디바이스 얻기
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	ThrowIfFailed( D3D12CreateDevice(hardwareAdapter.Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device)) );
+	ThrowIfFailed(D3D12CreateDevice(hardwareAdapter.Get(), gD3D_FEATURE_LEVEL, IID_PPV_ARGS(&m_device)));
 	//실제 디바이스를 만들지는 않지만 확인용으로 쓸수있다
 	//D3D12CreateDevice(hardwareAdapter.Get(), gD3D_FEATURE_LEVEL, _uuidof(ID3D12Device), nullptr);
-	
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 커멘드큔 얻기
@@ -119,10 +104,7 @@ void CoreFrameWork::OnInit()
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-	ThrowIfFailed( m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)) );
-
-
-
+	ThrowIfFailed(m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)));
 
 	// Create a command allocator.
 	ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator)));
@@ -138,10 +120,6 @@ void CoreFrameWork::OnInit()
 
 	// 시작 펜스 값을 초기화합니다.
 	m_fenceValue = 1;
-
-
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 스왑 체인을 어떤종류인지 설명하고 생성.
@@ -164,33 +142,21 @@ void CoreFrameWork::OnInit()
 		&swapChain
 	));
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 풀스크린 막기 알트 + 엔터 막기
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ThrowIfFailed(factory->MakeWindowAssociation(Win32Application::GetHwnd(), DXGI_MWA_NO_ALT_ENTER));
-
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// IDXGISwapChain1을 IDXGISwapChain3으로 형변환한단
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ThrowIfFailed(swapChain.As(&m_swapChain));
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 현제 백버퍼가 어떤놈인지 인덱스를 받는다
 	// 현재 후면 버퍼의 권리를 얻는 버퍼를 탐색
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
-
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 정보체(Descriptor)라는 추상적인 개념으로 관리하며
@@ -209,9 +175,6 @@ void CoreFrameWork::OnInit()
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// 깊이 스텐실 뷰 (DSV) 기술자 힙을 기술하고 생성합니다.
 	// 각 프레임에는 자체 깊이 스텐실이 있습니다 (그림자를 씁니다)
@@ -223,9 +186,6 @@ void CoreFrameWork::OnInit()
 	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	dsvHeapDesc.NodeMask = 0;
 	ThrowIfFailed(m_device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_dsvHeap)));
-
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Create frame resources.
@@ -239,9 +199,6 @@ void CoreFrameWork::OnInit()
 		rtvHandle.Offset(1, m_rtvDescriptorSize);
 	}
 
-
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Create frame resources.
 	// Create the depth/stencil buffer and view.
@@ -254,11 +211,11 @@ void CoreFrameWork::OnInit()
 	depthStencilDesc.DepthOrArraySize = 1;
 	depthStencilDesc.MipLevels = 1;
 
-	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from 
+	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from
 	// the depth buffer.  Therefore, because we need to create two views to the same resource:
 	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS
 	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT
-	// we need to create the depth buffer resource with a typeless format.  
+	// we need to create the depth buffer resource with a typeless format.
 	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 
 	depthStencilDesc.SampleDesc.Count = 1;
@@ -290,9 +247,6 @@ void CoreFrameWork::OnInit()
 	m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mDepthStencilBuffer.Get(),
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE));
 
-
-
-	
 	// Update the viewport transform to cover the client area.
 	mScreenViewport.TopLeftX = 0;
 	mScreenViewport.TopLeftY = 0;
@@ -301,9 +255,6 @@ void CoreFrameWork::OnInit()
 	mScreenViewport.MinDepth = 0.0f;
 	mScreenViewport.MaxDepth = 1.0f;
 	mScissorRect = { 0, 0, static_cast<LONG>(m_width), static_cast<LONG>(m_height) };
-
-
-
 
 	// 처음에는 레코딩 상태에서 생성 될 때 초기화하는 동안 명령 목록을 닫아야합니다.
 	ThrowIfFailed(m_commandList->Close());
@@ -319,7 +270,6 @@ void CoreFrameWork::OnRender()
 	float color[4];
 	ID3D12CommandList* ppCommandLists[1];
 	UINT64 fenceToWaitFor;
-
 
 	// Reset (re-use) the memory associated command allocator.
 	ThrowIfFailed(m_commandAllocator->Reset());
@@ -388,5 +338,4 @@ void CoreFrameWork::OnRender()
 
 	// Alternate the back buffer index back and forth between 0 and 1 each frame.
 	m_frameIndex == 0 ? m_frameIndex = 1 : m_frameIndex = 0;
-
 }

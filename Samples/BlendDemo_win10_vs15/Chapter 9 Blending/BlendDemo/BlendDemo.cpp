@@ -307,7 +307,11 @@ void BlendApp::UpdateScene(float dt)
 
 void BlendApp::DrawScene()
 {
-	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Silver));
+	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[0], reinterpret_cast<const float*>(&Colors::Silver));
+	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[1], reinterpret_cast<const float*>(&Colors::Silver));
+	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[2], reinterpret_cast<const float*>(&Colors::Silver));
+	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[3], reinterpret_cast<const float*>(&Colors::Silver));
+
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(InputLayouts::Basic32);

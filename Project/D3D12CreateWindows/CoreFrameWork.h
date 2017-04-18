@@ -57,7 +57,6 @@ private:
 	ComPtr<ID3D12Device> m_device;
 	ComPtr<ID3D12CommandQueue> m_commandQueue;
 
-	
 	ComPtr<ID3D12CommandAllocator> m_commandAllocator;
 	ComPtr<ID3D12GraphicsCommandList> m_commandList;
 	ComPtr<ID3D12Fence> m_fence;
@@ -67,12 +66,11 @@ private:
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT mScissorRect;
 
-
 protected:
 	void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
 
 public:
-	inline ComPtr<ID3D12Device> GetDevices(int _index=0) {
+	inline ComPtr<ID3D12Device> GetDevices(int _index = 0) {
 		return m_device;
 	}
 };
