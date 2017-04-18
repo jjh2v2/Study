@@ -18,13 +18,13 @@
 #pragma comment(lib, "dxguid.lib")
 #ifdef _DEBUG
 
-	#if _WIN64
-		#pragma comment(lib, "Effects11d64x.lib")
-		#pragma comment(lib, "DirectXTexD64x.lib")
-	#else
-		#pragma comment(lib, "Effects11d.lib")
-		#pragma comment(lib, "DirectXTexD.lib")
-	#endif // _WIN64
+#if _WIN64
+#pragma comment(lib, "Effects11d64x.lib")
+#pragma comment(lib, "DirectXTexD64x.lib")
+#else
+#pragma comment(lib, "Effects11d.lib")
+#pragma comment(lib, "DirectXTexD.lib")
+#endif // _WIN64
 
 #else
 
@@ -58,7 +58,7 @@ public:
 	bool Init();
 	void OnResize();
 	void UpdateScene(float dt);
-	void DrawScene(); 
+	void DrawScene();
 
 	void OnMouseDown(WPARAM btnState, int x, int y);
 	void OnMouseUp(WPARAM btnState, int x, int y);
@@ -91,29 +91,28 @@ private:
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
-				   PSTR cmdLine, int showCmd)
+	PSTR cmdLine, int showCmd)
 {
 	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	BoxApp theApp(hInstance);
-	
-	if( !theApp.Init() )
+
+	if (!theApp.Init())
 		return 0;
-	
+
 	return theApp.Run();
 }
- 
 
 BoxApp::BoxApp(HINSTANCE hInstance)
-: D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
-  mfxWorldViewProj(0), mInputLayout(0), 
-  mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
+	: D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
+	mfxWorldViewProj(0), mInputLayout(0),
+	mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
 {
 	mMainWndCaption = L"Box Demo";
-	
+
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
@@ -133,7 +132,7 @@ BoxApp::~BoxApp()
 
 bool BoxApp::Init()
 {
-	if(!D3DApp::Init())
+	if (!D3DApp::Init())
 		return false;
 
 	BuildGeometryBuffers();
@@ -160,9 +159,9 @@ void BoxApp::UpdateScene(float dt)
 	float y = mRadius*cosf(mPhi);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
+	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
 	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
@@ -177,33 +176,33 @@ void BoxApp::DrawScene()
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView[3], reinterpret_cast<const float*>(&Colors::Blue));
 	/***********************************************************************************************/
 
-	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	UINT stride = sizeof(Vertex);
-    UINT offset = 0;
-    md3dImmediateContext->IASetVertexBuffers(0, 1, &mBoxVB, &stride, &offset);
+	UINT offset = 0;
+	md3dImmediateContext->IASetVertexBuffers(0, 1, &mBoxVB, &stride, &offset);
 	md3dImmediateContext->IASetIndexBuffer(mBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set constants
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	XMMATRIX view = XMLoadFloat4x4(&mView);
+	XMMATRIX proj = XMLoadFloat4x4(&mProj);
 	XMMATRIX worldViewProj = world*view*proj;
 
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 
-    D3DX11_TECHNIQUE_DESC techDesc;
-    mTech->GetDesc( &techDesc );
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-        
+	D3DX11_TECHNIQUE_DESC techDesc;
+	mTech->GetDesc(&techDesc);
+	for (UINT p = 0; p < techDesc.Passes; ++p)
+	{
+		mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
+
 		// 36 indices for the box.
 		md3dImmediateContext->DrawIndexed(36, 0, 0);
-    }
+	}
 
 	/***********************************************************************************************/
 	//DirectX::ScratchImage DxImage;
@@ -233,7 +232,7 @@ void BoxApp::OnMouseUp(WPARAM btnState, int x, int y)
 
 void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	if( (btnState & MK_LBUTTON) != 0 )
+	if ((btnState & MK_LBUTTON) != 0)
 	{
 		// Make each pixel correspond to a quarter of a degree.
 		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
@@ -241,12 +240,12 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 		// Update angles based on input to orbit camera around box.
 		mTheta += dx;
-		mPhi   += dy;
+		mPhi += dy;
 
 		// Restrict the angle mPhi.
-		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi-0.1f);
+		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
 	}
-	else if( (btnState & MK_RBUTTON) != 0 )
+	else if ((btnState & MK_RBUTTON) != 0)
 	{
 		// Make each pixel correspond to 0.005 unit in the scene.
 		float dx = 0.005f*static_cast<float>(x - mLastMousePos.x);
@@ -266,8 +265,8 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 void BoxApp::BuildGeometryBuffers()
 {
 	// Create vertex buffer
-    Vertex vertices[] =
-    {
+	Vertex vertices[] =
+	{
 		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), Colors::White   },
 		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), Colors::Black   },
 		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), Colors::Red     },
@@ -276,19 +275,18 @@ void BoxApp::BuildGeometryBuffers()
 		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), Colors::Yellow  },
 		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), Colors::Cyan    },
 		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), Colors::Magenta }
-    };
+	};
 
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(Vertex) * 8;
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_IMMUTABLE;
+	vbd.ByteWidth = sizeof(Vertex) * 8;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+	vbd.MiscFlags = 0;
 	vbd.StructureByteStride = 0;
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = vertices;
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
-
+	D3D11_SUBRESOURCE_DATA vinitData;
+	vinitData.pSysMem = vertices;
+	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
 	// Create the index buffer
 
@@ -314,34 +312,34 @@ void BoxApp::BuildGeometryBuffers()
 		1, 6, 2,
 
 		// bottom face
-		4, 0, 3, 
+		4, 0, 3,
 		4, 3, 7
 	};
 
 	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(UINT) * 36;
-    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.ByteWidth = sizeof(UINT) * 36;
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
 	ibd.StructureByteStride = 0;
-    D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = indices;
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
+	D3D11_SUBRESOURCE_DATA iinitData;
+	iinitData.pSysMem = indices;
+	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
 }
- 
+
 void BoxApp::BuildFX()
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
-    shaderFlags |= D3D10_SHADER_DEBUG;
+	shaderFlags |= D3D10_SHADER_DEBUG;
 	shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
 #endif
- 
+
 	ID3DBlob*	pBufferErrors = NULL;
 	HRESULT hr = D3DX11CompileEffectFromFile(
-		L"FX/color.fx", 
-		nullptr, 
+		L"FX/color.fx",
+		nullptr,
 		nullptr,
 		shaderFlags,
 		0,
@@ -349,7 +347,7 @@ void BoxApp::BuildFX()
 		&mFX,
 		&pBufferErrors);
 
-	mTech    = mFX->GetTechniqueByName("ColorTech");
+	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
@@ -363,9 +361,8 @@ void BoxApp::BuildVertexLayout()
 	};
 
 	// Create the input layout
-    D3DX11_PASS_DESC passDesc;
-    mTech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature, 
+	D3DX11_PASS_DESC passDesc;
+	mTech->GetPassByIndex(0)->GetDesc(&passDesc);
+	HR(md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }
- 
