@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D12CreateWindows", "Project\D3D12CreateWindows\D3D12CreateWindows.vcxproj", "{89084172-932A-4D87-A431-93E7CDAE2046}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D11MultiRanderTarget", "Project\D3D11MultiRanderTarget\D3D11MultiRanderTarget.vcxproj", "{679459B8-BCED-447C-8D1F-E88F03623D70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{89084172-932A-4D87-A431-93E7CDAE2046}.Release|x64.Build.0 = Release|x64
 		{89084172-932A-4D87-A431-93E7CDAE2046}.Release|x86.ActiveCfg = Release|Win32
 		{89084172-932A-4D87-A431-93E7CDAE2046}.Release|x86.Build.0 = Release|Win32
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Debug|x64.ActiveCfg = Debug|x64
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Debug|x64.Build.0 = Debug|x64
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Debug|x86.ActiveCfg = Debug|Win32
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Debug|x86.Build.0 = Debug|Win32
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Release|x64.ActiveCfg = Release|x64
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Release|x64.Build.0 = Release|x64
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Release|x86.ActiveCfg = Release|Win32
+		{679459B8-BCED-447C-8D1F-E88F03623D70}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
