@@ -170,7 +170,7 @@ void D3DApp::OnResize()
 	HR(md3dDevice->CreateTexture2D(&dtd, NULL, &m_ColorSpecIntensityRT));
 	HR(md3dDevice->CreateRenderTargetView(m_ColorSpecIntensityRT, 0, &mRenderTargetView[0]));
 
-	dtd.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+	dtd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_R11G11B10_FLOAT
 	HR(md3dDevice->CreateTexture2D(&dtd, NULL, &m_NormalRT));
 	HR(md3dDevice->CreateRenderTargetView(m_NormalRT, 0, &mRenderTargetView[1]));
 
