@@ -178,8 +178,10 @@ void BoxApp::DrawScene()
 
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	md3dImmediateContext->IASetInputLayout(mInputLayout);
+	/***** 각각의 오브젝트에 따라 코드가 달라질거 같다. *****/
+
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	md3dImmediateContext->IASetInputLayout(mInputLayout);//mInputLayout는 버텍스버퍼 인풋 레이아웃
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -205,6 +207,7 @@ void BoxApp::DrawScene()
 	}
 
 	/***********************************************************************************************/
+	// 텍스쳐 하드에 저장하기
 	//DirectX::ScratchImage DxImage;
 	//HRESULT hr_0 = DirectX::CaptureTexture(md3dDevice, md3dImmediateContext, m_ColorSpecIntensityRT, DxImage);
 	//const Image* img = DxImage.GetImages();
@@ -214,6 +217,9 @@ void BoxApp::DrawScene()
 	//if (FAILED(hr)) {}
 	/***********************************************************************************************/
 
+	/***** 각각의 오브젝트에 따라 코드가 달라질거 같다. *****/
+
+	// 백 버퍼를 프론트 버퍼와 flip을 하든 copy를 하든 바꿔서 화면에 뿌려준다.
 	HR(mSwapChain->Present(0, 0));
 }
 
