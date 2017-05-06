@@ -43,6 +43,7 @@
 #include "MathHelper.h"
 #include "DirectXTex.h"
 
+
 struct Vertex
 {
 	XMFLOAT3 Pos;
