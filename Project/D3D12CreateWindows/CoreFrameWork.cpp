@@ -211,11 +211,13 @@ void CoreFrameWork::OnInit()
 	depthStencilDesc.DepthOrArraySize = 1;
 	depthStencilDesc.MipLevels = 1;
 
-	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from
-	// the depth buffer.  Therefore, because we need to create two views to the same resource:
-	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS
-	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT
-	// we need to create the depth buffer resource with a typeless format.
+	// Correction 11/12/2016 : SSAO 장에서는 읽을 깊이 버퍼에 SRV가 필요합니다.
+	// 깊이 버퍼. 따라서 같은 리소스에 대해 두 개의 뷰를 만들어야하기 때문에 :
+	// 1. SRV 형식 : DXGI_FORMAT_R24_UNORM_X8_TYPELESS
+	// 2. DSV 형식 : DXGI_FORMAT_D24_UNORM_S8_UINT
+	// SRV(SHADER RESOURCE VIEW) , DSV(DEPTH STENCIL VIEW)
+	// 타입이없는 형식으로 깊이 버퍼 리소스를 생성해야합니다.
+
 	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 
 	depthStencilDesc.SampleDesc.Count = 1;
