@@ -209,13 +209,18 @@ void BoxApp::DrawScene()
 
 	/***********************************************************************************************/
 	// 텍스쳐 하드에 저장하기
-	//DirectX::ScratchImage DxImage;
-	//HRESULT hr_0 = DirectX::CaptureTexture(md3dDevice, md3dImmediateContext, m_ColorSpecIntensityRT, DxImage);
-	//const Image* img = DxImage.GetImages();
-	//HRESULT hr = SaveToWICFile(*img, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_JPEG), L"NEW_IMAGE.PNG");
-	//if (FAILED(hr)) {}
-	//hr = SaveToDDSFile(*img, DDS_FLAGS_NONE, L"NEW_TEXTURE.DDS");
-	//if (FAILED(hr)) {}
+	//DirectX::ScratchImage DxImage0, DxImage1, DxImage2;
+	//HRESULT hr = DirectX::CaptureTexture( md3dDevice, md3dImmediateContext, m_ColorSpecIntensityRT, DxImage0 );
+	//hr = DirectX::CaptureTexture( md3dDevice, md3dImmediateContext, m_NormalRT, DxImage1 );
+	//hr = DirectX::CaptureTexture( md3dDevice, md3dImmediateContext, m_SpecPowerRT, DxImage2 );
+	//const Image* img0 = DxImage0.GetImages();
+	//const Image* img1 = DxImage1.GetImages();
+	//const Image* img2 = DxImage2.GetImages();
+	//hr = SaveToWICFile( *img0, WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_JPEG ), L"NEW_IMAGE0.PNG" );
+	//hr = SaveToWICFile( *img1, WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_JPEG ), L"NEW_IMAGE1.PNG" );
+	//hr = SaveToWICFile( *img2, WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_JPEG ), L"NEW_IMAGE2.PNG" );
+	//hr = SaveToDDSFile( *img, DDS_FLAGS_NONE, L"NEW_TEXTURE.DDS" );
+	//if ( FAILED( hr ) ) { }
 	/***********************************************************************************************/
 
 	/***** 각각의 오브젝트에 따라 코드가 달라질거 같다. *****/

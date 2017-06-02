@@ -179,7 +179,7 @@ void D3DApp::OnResize()
 	HR(md3dDevice->CreateRenderTargetView(m_SpecPowerRT, 0, &mRenderTargetView[2]));
 
 	// Resize the swap chain and recreate the render target view.
-	HR(mSwapChain->ResizeBuffers(1, mClientWidth, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+	HR(mSwapChain->ResizeBuffers(1/*4*/, mClientWidth, mClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ID3D11Texture2D* backBuffer;
 	HR(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
 	HR(md3dDevice->CreateRenderTargetView(backBuffer, 0, &mRenderTargetView[3]));
