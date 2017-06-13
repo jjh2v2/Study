@@ -19,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box", "Samples\d3d12book-ma
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynamicCube", "Samples\d3d12book-master\Chapter 18 Cube Mapping\DynamicCube\DynamicCube.vcxproj", "{454E2EDD-4E64-49AE-8B29-9AC94FAC2494}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntelExample", "IntelExample", "{6A137614-808C-4CD1-AF4A-CC129352BD6B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asteroids_d3d12", "Samples\asteroids_d3d12-master\asteroids_d3d12.vcxproj", "{176C9B9A-2E06-4AC5-B186-56C9280104E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{454E2EDD-4E64-49AE-8B29-9AC94FAC2494}.Release|x64.Build.0 = Release|x64
 		{454E2EDD-4E64-49AE-8B29-9AC94FAC2494}.Release|x86.ActiveCfg = Release|Win32
 		{454E2EDD-4E64-49AE-8B29-9AC94FAC2494}.Release|x86.Build.0 = Release|Win32
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Debug|x64.ActiveCfg = Debug|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Debug|x64.Build.0 = Debug|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Debug|x86.ActiveCfg = Debug|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|Any CPU.ActiveCfg = Release|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x64.ActiveCfg = Release|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x64.Build.0 = Release|x64
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +107,6 @@ Global
 		{3FC193D0-7E4E-4918-8431-D67391EE4145} = {059A6B68-5773-4047-870B-A3D8E2839366}
 		{B590A678-E935-4AED-AF1F-3B6D02A4AE95} = {D343A4AC-130C-43AE-A3E1-7BC2F43C1FA7}
 		{454E2EDD-4E64-49AE-8B29-9AC94FAC2494} = {D343A4AC-130C-43AE-A3E1-7BC2F43C1FA7}
+		{176C9B9A-2E06-4AC5-B186-56C9280104E7} = {6A137614-808C-4CD1-AF4A-CC129352BD6B}
 	EndGlobalSection
 EndGlobal
