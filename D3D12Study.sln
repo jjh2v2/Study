@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntelExample", "IntelExampl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asteroids_d3d12", "Samples\asteroids_d3d12-master\asteroids_d3d12.vcxproj", "{176C9B9A-2E06-4AC5-B186-56C9280104E7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shapes", "Samples\d3d12book-master\Chapter 7 Drawing in Direct3D Part II\Shapes\Shapes.vcxproj", "{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,16 @@ Global
 		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x64.ActiveCfg = Release|x64
 		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x64.Build.0 = Release|x64
 		{176C9B9A-2E06-4AC5-B186-56C9280104E7}.Release|x86.ActiveCfg = Release|x64
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Debug|x64.ActiveCfg = Debug|x64
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Debug|x64.Build.0 = Debug|x64
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Debug|x86.ActiveCfg = Debug|Win32
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Debug|x86.Build.0 = Debug|Win32
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Release|Any CPU.ActiveCfg = Release|Win32
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Release|x64.ActiveCfg = Release|x64
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Release|x64.Build.0 = Release|x64
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Release|x86.ActiveCfg = Release|Win32
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +120,6 @@ Global
 		{B590A678-E935-4AED-AF1F-3B6D02A4AE95} = {D343A4AC-130C-43AE-A3E1-7BC2F43C1FA7}
 		{454E2EDD-4E64-49AE-8B29-9AC94FAC2494} = {D343A4AC-130C-43AE-A3E1-7BC2F43C1FA7}
 		{176C9B9A-2E06-4AC5-B186-56C9280104E7} = {6A137614-808C-4CD1-AF4A-CC129352BD6B}
+		{3F4D6E80-3635-4577-B6AC-CE8B90068BDD} = {D343A4AC-130C-43AE-A3E1-7BC2F43C1FA7}
 	EndGlobalSection
 EndGlobal
