@@ -1,6 +1,130 @@
 #include "windows.h"
 #include<process.h>
 
+/*
+voidOnRender_MainThread()
+{
+	// 각 자식 렌더링 스레드에 알리고 렌더링을 시작합니다.
+	forworkerIdinworkerIdList
+	{
+		SetEvent(BeginRendering_Events[workerId]);
+	}
+
+	// Pre 명령 목록은 렌더링을 준비하는 데 사용됩니다.
+	// Pre 명령 목록 재설정
+	pPreCommandList->Reset(...);
+
+	// 백 버퍼의 표시 상태와 Rendering Target 사이의 장벽을 설정합니다.
+	// 백 버퍼가 렌더 타겟으로 사용될 것임을 나타냅니다.
+	pPreCommandList->ResourceBarrier(1, (..., D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// 백 버퍼의 색을 지운다.
+	pPreCommandList->ClearRenderTargetView(...);
+
+	// 백 버퍼의 깊이 / 템플릿 지우기
+	pPreCommandList->ClearDepthStencilView(...);
+
+	// Pre 명령리스트의 다른 연산들
+	// ...
+
+	// Pre 명령 목록 닫기
+	pPreCommandList->Close();
+
+	// Post 명령 목록은 렌더링 후에 끝내기 위해 사용됩니다.
+	// 백 버퍼의 표시 상태와 Rendering Target 사이의 장벽을 설정합니다.
+	// 백 버퍼가 렌더 타겟에서 프리젠테이션(present 표시 표시 상태)으로 나타냅니다.
+	pPostCommandList->ResourceBarrier(1, (..., D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+	// Post 명령 목록의 다른 연산들
+	// ...
+
+	// Post 명령 목록 닫기
+	pPostCommandList->Close();
+
+	// Pre 명령 목록 제출
+	pCommandQueue->ExecuteCommandLists(..., pPreCommandList);
+
+	// 모든 작업자 스레드가 완료 될 때까지 대기 Task1
+	// Task1 쓰레드가 끝날때까지 모두 대기 한다
+	WaitForMultipleObjects(Task1_Events);
+
+	// 모든 작업자 스레드에 대해 Task1의 명령 목록을 제출합니다.
+	pCommandQueue->ExecuteCommandLists(..., pCommandListsForTask1);
+
+	// 모든 작업자 스레드가 완료 될 때까지 대기 Task2
+	// Task2 쓰레드가 끝날때까지 모두 대기 한다
+	WaitForMultipleObjects(Task2_Events);
+
+	// 완료된 렌더링 명령을 제출합니다 (모든 작업자 스레드에 대해 Task2의 명령 목록)
+	pCommandQueue->ExecuteCommandLists(..., pCommandListsForTask2);
+
+	// ...
+	// 모든 작업자 스레드가 TaskN을 완료 할 때까지 기다립니다.
+	WaitForMultipleObjects(TaskN_Events);
+
+	// 완료된 렌더링 명령을 제출합니다 (모든 작업자 스레드에 대해 TaskN의 명령 목록)
+	pCommandQueue->ExecuteCommandLists(..., pCommandListsForTaskN);
+
+	// 마지막 명령 목록을 제출합니다 (pPostCommandList).
+	pCommandQueue->ExecuteCommandLists(..., pPostCommandList);
+
+	// SwapChain 프리젠 테이션 사용
+	pSwapChain->Present(...);
+}
+
+
+voidOnRender_WorkerThread(workerId)
+{
+	// 각 루프는 자식 스레드의 한 프레임 렌더링을 나타냅니다.
+	while (running)
+	{
+		// 메인 프레임에서 이벤트 알림을 기다리면 한 프레임 렌더링이 시작됩니다.
+		WaitForSingleObject(BeginRendering_Events[workerId]);
+
+		// Rendering subtask1
+		{
+			pCommandList1->SetGraphicsRootSignature(...);
+			pCommandList1->IASetVertexBuffers(...);
+			pCommandList1->IASetIndexBuffer(...);
+			//...
+			pCommandList1->DrawIndexedInstanced(...);
+			pCommandList1->Close();
+
+			// 현재 작업자 스레드의 렌더링 하위 작업 1이 완료되었음을 주 스레드에 알립니다.
+			SetEvent(Task1_Events[workerId]);
+		}
+
+		// Rendering subtask2
+		{
+			pCommandList2->SetGraphicsRootSignature(...);
+			pCommandList2->IASetVertexBuffers(...);
+			pCommandList2->IASetIndexBuffer(...);
+			//...
+			pCommandList2->DrawIndexedInstanced(...);
+			pCommandList2->Close();
+
+			// 현재 작업자 스레드의 렌더링 하위 작업 2가 완료되었음을 주 스레드에 알립니다.
+			SetEvent(Task2_Events[workerId]);
+		}
+
+		// 더 많은 렌더링 하위 작업
+		//...
+
+		// Rendering subtaskN
+		{
+			pCommandListN->SetGraphicsRootSignature(...);
+			pCommandListN->IASetVertexBuffers(...);
+			pCommandListN->IASetIndexBuffer(...);
+			//...
+			pCommandListN->DrawIndexedInstanced(...);
+			pCommandListN->Close();
+
+			// 현재 작업자 스레드의 렌더링 하위 작업 N이 완료되었음을 주 스레드에 알립니다.
+			SetEvent(TaskN_Events[workerId]);
+		}
+	}
+}
+*/
 
 struct ThreadParameter
 {

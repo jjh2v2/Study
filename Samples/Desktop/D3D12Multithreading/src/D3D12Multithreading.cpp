@@ -853,7 +853,7 @@ void D3D12Multithreading::BeginFrame()
 {
 	m_pCurrentFrameResource->Init();
 
-	// Indicate that the back buffer will be used as a render target.
+	// 백 버퍼가 렌더 타겟으로 사용될 것임을 나타냅니다.
 	m_pCurrentFrameResource->m_commandLists[CommandListPre]->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	// Clear the render target and depth stencil.
@@ -879,7 +879,7 @@ void D3D12Multithreading::EndFrame()
 {
 	m_pCurrentFrameResource->Finish();
 
-	// Indicate that the back buffer will now be used to present.
+	// 백 버퍼가 렌더 타겟에서 프리젠테이션(present 표시)으로 나타냅니다.
 	m_pCurrentFrameResource->m_commandLists[CommandListPost]->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
 	ThrowIfFailed(m_pCurrentFrameResource->m_commandLists[CommandListPost]->Close());
